@@ -2,19 +2,19 @@
 
 ## Overview
 
-This project demonstrates controlled simulation of the following network attacks:
+This project demonstrates controlled simulation and analysis of two network attacks:
 
-* SYN Flood
-* UDP Flood
+* **SYN Flood**
+* **UDP Flood**
 
-These simulations are implemented using Python and Scapy in an isolated virtual lab environment.
+The simulations are implemented using **Python (Scapy)** in an isolated virtual lab to study packet-level behavior and impact on a target system.
 
 ---
 
 ## ⚠️ Disclaimer
 
-This project is strictly for educational purposes.
-All simulations were performed in a controlled environment (Kali Linux → Metasploitable).
+This project is strictly for **educational purposes only**.
+All simulations were performed in a controlled environment (**Kali Linux → Metasploitable**).
 
 ---
 
@@ -94,6 +94,18 @@ sudo tcpdump -i eth0 tcp
 
 ---
 
+### 📦 Packet Capture & Transfer
+
+Traffic was captured on the target using `tcpdump` and saved as a `.pcap` file:
+
+```bash
+sudo tcpdump -i eth0 tcp -w syn_capture.pcap
+```
+
+The file was then transferred to Kali using a local network transfer method (netcat) for further analysis.
+
+---
+
 ### Result
 
 * Multiple SYN packets observed
@@ -130,6 +142,18 @@ sudo tcpdump -i eth0 udp
 
 ---
 
+### 📦 Packet Capture & Transfer
+
+UDP traffic was captured and stored:
+
+```bash
+sudo tcpdump -i eth0 udp -w udp_capture.pcap
+```
+
+The capture file was then transferred to Kali for analysis.
+
+---
+
 ### Result
 
 * Continuous UDP packets observed
@@ -138,11 +162,52 @@ sudo tcpdump -i eth0 udp
 
 ---
 
+## Wireshark Analysis
+
+### SYN Flood Analysis
+
+**Filter used:**
+
+```
+tcp.flags.syn == 1 && tcp.flags.ack == 0
+```
+
+Observations:
+
+* Large number of SYN packets
+* Same destination (`192.168.56.102:80`)
+* Multiple random source IPs
+* No corresponding ACK packets
+
+<img width="1349" height="566" alt="Screenshot 2026-03-19 144620" src="https://github.com/user-attachments/assets/bdc23607-3211-49f0-b162-014fac985ca6" />
+
+
+---
+
+### UDP Flood Analysis
+
+**Filter used:**
+
+```
+udp
+```
+
+Observations:
+
+* Continuous UDP packet flow
+* Random source and destination ports
+* Consistent payload size (Len=128)
+* High packet frequency
+
+<img width="1169" height="593" alt="Screenshot 2026-03-19 144522" src="https://github.com/user-attachments/assets/e1f39da1-35db-4782-94a4-d38b0de0f4ef" />
+
+---
+
 ## Key Observations
 
-* TCP-based attacks exploit connection states
-* UDP-based attacks rely on traffic volume
-* Packet crafting enables controlled simulation
+* TCP-based attacks exploit connection state (half-open connections)
+* UDP-based attacks rely on high traffic volume
+* Packet crafting enables controlled simulation and analysis
 
 ---
 
@@ -162,6 +227,18 @@ This experiment demonstrates how network attacks behave at the packet level and 
 pip install scapy
 sudo python3 syn_demo.py
 sudo python3 udp_demo.py
+```
+
+---
+
+## Project Structure
+
+```
+.
+├── syn_demo.py
+├── udp_demo.py
+├── screenshots/
+└── README.md
 ```
 
 ---
