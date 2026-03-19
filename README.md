@@ -11,7 +11,7 @@ The simulations are implemented using **Python (Scapy)** in an isolated virtual 
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This project is strictly for **educational purposes only**.
 All simulations were performed in a controlled environment (**Kali Linux → Metasploitable**).
